@@ -1,0 +1,22 @@
+image: python:3-slim
+before_script:
+    - pip3 install flake8
+    - pip3 install mypy
+    - pip3 install numpy
+stages:
+    - static_analysis
+    - test
+static_analysis:
+    stage: static_analysis
+    script:
+        - flake8 --max-line-length=120 src/*.py
+        - flake8 --max-line-length=120 tests/*.py
+app_test:
+    stage: test
+    script:
+          - echo "Tests started..."
+          - cd tests
+          - python3 test.py
+          - echo "Tests over."
+
+
