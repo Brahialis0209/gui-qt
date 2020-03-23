@@ -4,7 +4,7 @@ The simplex method is an iterative process of the directed solution of a system 
 which begins with a supporting solution and, in search of a better option,
 moves along the corner points of the region of an acceptable solution that improves
 the value of the objective function until the objective function reaches the optimal value.
----
+
 
 Instruction:
 1. Select the number of rows and variables
