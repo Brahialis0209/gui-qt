@@ -14,7 +14,7 @@ app_test:
     script:
           - echo "Tests started..."
           - cd tests
-          - python3 test.py
+          - python3 -m unittest -v test.py
           - echo "Tests over."
 
 
