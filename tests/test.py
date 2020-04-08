@@ -7,7 +7,7 @@ from tests.dates.test_dates import give_second_test_dates, give_first_test_dates
 from tests.example import solve_example
 
 
-class TestTraversalGraph(unittest.TestCase):
+class TestGui(unittest.TestCase):
 
     def test_first(self):
         self.assertEqual(solve_example(*give_first_test_dates()), 48.5)

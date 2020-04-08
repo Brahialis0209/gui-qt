@@ -1,7 +1,7 @@
 import numpy as np
 import itertools as it
 import copy as cp
-from src.logic.exceptions import SimplexAlgorithmException, \
+from src.alg.exceptions import SimplexAlgorithmException, \
     NotSolveSimplex
 
 

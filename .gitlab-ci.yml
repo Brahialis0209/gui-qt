@@ -1,14 +1,13 @@
 image: python:3-slim
 before_script:
-    - pip3 install flake8
-    - pip3 install numpy
+    - pip3 install -r requirements.txt
 stages:
     - static_analysis
     - test
 static_analysis:
     stage: static_analysis
     script:
-        - flake8 --max-line-length=120 src/*.py
+        - flake8 src/*.py
 app_test:
     stage: test
     script:

@@ -1,4 +1,4 @@
-from src.logic.simplex.lin_prog_problem import np
+from src.alg.simplex.lin_prog_problem import np
 
 
 def give_first_test_dates():

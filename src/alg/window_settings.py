@@ -2,9 +2,9 @@ from PyQt5 import QtWidgets
 from design_gui.design import Ui_MainWindow
 import numpy as np
 from matplotlib import pylab
-from src.logic.exceptions import InputSimplexException,\
+from src.alg.exceptions import InputSimplexException,\
     SimplexAlgorithmException, NotSolveSimplex
-from src.logic.simplex.start_work import SimplexValues
+from src.alg.simplex.start_work import SimplexValues
 
 
 class MyWindow(QtWidgets.QMainWindow):

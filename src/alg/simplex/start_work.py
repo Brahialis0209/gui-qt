@@ -1,9 +1,9 @@
 import numpy as np
 import copy as cp
-from src.logic.simplex.lin_prog_problem import LinearProgramProblem
-from src.logic.exceptions import SimplexAlgorithmException, \
+from src.alg.simplex.lin_prog_problem import LinearProgramProblem
+from src.alg.exceptions import SimplexAlgorithmException, \
     NotSolveSimplex
-from src.logic.simplex.simplex_method import start_simplex_method
+from src.alg.simplex.simplex_method import start_simplex_method
 
 
 # Задача линейного программирования
