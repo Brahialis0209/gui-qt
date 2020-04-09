@@ -1,6 +1,4 @@
 import numpy as np
-import copy as cp
-import math as mt
 
 
 class LinearProgramProblem:
@@ -13,17 +11,6 @@ class LinearProgramProblem:
         self.var_signs = var_sings
         self.lim_cnt, self.var_cnt = self.A.shape
         self.conf_X = list([i] for i in range(self.var_cnt))
-
-    def print_task(self):
-        print(' + '.join(str(value) + 'x' + str(id) for id, value in
-                         enumerate(self.c)), '->', self.extr)
-        for id in range(self.lim_cnt):
-            print(' + '.join(str(value) + 'x' + str(j) for j, value in
-                             enumerate(self.A[id])), self.signs[id],
-                  self.b[id])
-        for id, sign in enumerate(self.var_signs):
-            if sign == 'positive':
-                print('x' + str(id), '>= 0')
 
     def convert_canon_type(self):
         self.convert_extr()
@@ -70,33 +57,6 @@ class LinearProgramProblem:
                 self.b[id] *= (-1)
                 self.A[id] = (-1) * self.A[id]
 
-    def create_dual_lp(self):
-        self.sort_conditions()
-        A_dual = self.A.transpose()
-        b_dual = self.c
-        c_dual = self.b
-        if self.extr == 'max':
-            extr_dual = 'min'
-        else:
-            extr_dual = 'max'
-        lim_cnt_dual, var_cnt_dual = A_dual.shape
-        var_signs_dual = list('any' for _ in range(var_cnt_dual))
-        signs_dual = list('=' for _ in range(lim_cnt_dual))
-
-        for id, sign in enumerate(self.signs):
-            if (sign == '>=' and self.extr == 'min') or \
-                    (sign == '<=' and self.extr == 'max'):
-                var_signs_dual[id] = 'positive'
-
-        for id, sign in enumerate(self.var_signs):
-            if sign == 'positive':
-                if extr_dual == 'min':
-                    signs_dual[id] = '>='
-                else:
-                    signs_dual[id] = '<='
-        return LinearProgramProblem(c_dual, extr_dual,
-                                    A_dual, signs_dual, b_dual, var_signs_dual)
-
     def sort_conditions(self):
         for id, sign in enumerate(self.signs):
             if (sign == '<=' and self.extr == 'min') or \
@@ -116,38 +76,3 @@ class LinearProgramProblem:
             elif len(nums) == 2:
                 init_X[id] = X[nums[0]] - X[nums[1]]
         return init_X
-
-    def find_dual_result(self, result_X):
-        rows, columns = self.A.shape
-        result_Y = np.zeros(rows)
-        null_y = list()
-        not_null_y = list()
-        not_equal_lim = list()
-
-        for i in range(rows):
-            value = 0
-            for j in range(columns):
-                value += result_X[j] * self.A[i][j]
-            if mt.fabs(value - self.b[i]) > 1e-14:
-                null_y.append(i)
-            else:
-                not_null_y.append(i)
-
-        for i in range(columns):
-            if result_X[i] == 0:
-                not_equal_lim.append(i)
-        A = cp.deepcopy(self.A.transpose())
-        c = cp.deepcopy(self.c)
-        null_y.reverse()
-        not_equal_lim.reverse()
-
-        for id in null_y:
-            A = np.delete(A, id, axis=1)
-        for id in not_equal_lim:
-            A = np.delete(A, id, axis=0)
-            c = np.delete(c, id)
-        sub_Y = np.linalg.solve(A, c)
-
-        for id, i in enumerate(not_null_y):
-            result_Y[i] = sub_Y[id]
-        return result_Y

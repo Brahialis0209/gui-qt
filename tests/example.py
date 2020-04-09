@@ -1,5 +1,6 @@
 from src.alg.simplex.simplex_method import start_simplex_method
-from src.alg.simplex.lin_prog_problem import LinearProgramProblem, np, cp
+from src.alg.simplex.lin_prog_problem import LinearProgramProblem, np
+import copy as cp
 
 
 def solve_example(*example_dates):

@@ -22,22 +22,16 @@ class SimplexValues:
     def extreme_value(self):
         lp = LinearProgramProblem(self.c, self.extreme,
                                   self.A, self.signs, self.b, self.var_signs)
-        lp.print_task()
         canon_lp = cp.deepcopy(lp)
         canon_lp.convert_canon_type()
         plot_points_to_true_form = list()
-
-        # ищем решение канон формы симплекс методом
-        try:
+        try:  # ищем решение канон формы симплекс методом
             X, plot_points = start_simplex_method(canon_lp.A, canon_lp.b,
                                                   canon_lp.c)
-
         except SimplexAlgorithmException:
             raise SimplexAlgorithmException()
-
         except Exception:
             raise NotSolveSimplex()
-
         result_X = canon_lp.find_init_X(X)  # решение прямой из решения канонической
         for point in plot_points:
             plot_points_to_true_form.append(canon_lp.find_init_X(point))

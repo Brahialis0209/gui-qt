@@ -64,11 +64,9 @@ class MyWindow(QtWidgets.QMainWindow):
         Y_lists = self.limit_functions(A, b, x_list)
         for i in range(self.M):
             pylab.plot(x_list, Y_lists[i])
-
         y_null_list = [x for x in x_list]
         x_null_list = [0 for i in range(len(y_null_list))]
         pylab.plot(x_null_list, y_null_list)
-
         arrowprops = {
             'arrowstyle': '->',
         }
@@ -79,7 +77,6 @@ class MyWindow(QtWidgets.QMainWindow):
             if id != 0:
                 line_type = "h"
             pylab.plot(point[0], point[1], line_type)
-
         pylab.annotate(u'Начальное приближение',
                        xy=(first_point[0], first_point[1]),
                        xytext=(first_point[0] + 2, first_point[1] + 0.1),
@@ -100,12 +97,9 @@ class MyWindow(QtWidgets.QMainWindow):
 
     def btn_clicked_dimensions(self):
         self.clear_labels()  # нужно если я уже посчитал что-то и
-        # ввел новую размерность, тогда лишнее останется
         self.N = int(self.ui.comboBox_columns.currentText())
         self.M = int(self.ui.comboBox_lines.currentText())
-
-        # строю все виджеты
-        self.build_table()
+        self.build_table()  # строю все виджеты
         self.build_function()
         self.build_value_limit()
         self.ui.pushButton_solve_simplex.show()  # кнопка "Посчиать"
@@ -156,37 +150,31 @@ class MyWindow(QtWidgets.QMainWindow):
         signs = [0 for i in range(self.M)]
         b = [0 for i in range(self.M)]
         var_signs = [0 for i in range(self.N)]
-
         for i in range(self.M):
             for j in range(self.N):
                 try:
                     A[i][j] = float(self.ui.tableWidget_A.item(i, j).text())
                 except Exception:
                     raise InputSimplexException(
-                        object_name="коффициенты для множества ограничений.")
-
+                        object_name="coefficients for goal function.")
         for i in range(self.N):
             try:
                 c[i] = float(self.ui.tableWidget_function.item(0, i).text())
             except Exception:
                 raise InputSimplexException(
                     object_name="коффициенты для функции цели.")
-
         for i in range(self.N):
             signs[i] = self.ui.tableWidget_A.cellWidget(i, self.N) \
                 .currentText()
-
         for i in range(self.M):
             try:
                 b[i] = float(self.ui.tableWidget_A.item(i, self.N + 1).text())
             except Exception:
                 raise InputSimplexException(
-                    object_name="правую часть множества ограничений.")
-
+                    object_name="the right side of the set of restrictions.")
         for i in range(self.N):
             var_signs[i] = self.ui.tableWidget_limit_value. \
                 cellWidget(0, i).currentText()
-
         extreme = self.ui.tableWidget_function.cellWidget(0, self.N) \
             .currentText()
         return c, extreme, A, signs, b, var_signs
@@ -212,7 +200,6 @@ class MyWindow(QtWidgets.QMainWindow):
         except InputSimplexException as exception:
             self.print_error_message(exception)
             return
-
         self.simplex_example = SimplexValues(*simplex_dates)
 
         try:
@@ -223,5 +210,4 @@ class MyWindow(QtWidgets.QMainWindow):
         except NotSolveSimplex as exception:
             self.print_error_message(exception)
             return
-
         self.print_solve_answer(result)
