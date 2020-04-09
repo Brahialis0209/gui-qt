@@ -18,11 +18,6 @@ or, being in the `gui-qt/src` folder, execute the command:`python main.py`
 - Also, if the dimension of the problem = 2, (two variables), then the application will suggest constructing a graph of iterations <br>
   when finding the optimal solution.
 - Use the magnifier in the panel to enlarge the image.
-### Example
-#### The next task was taken as an example.
-![gui](images/example1_widgets.png)<br>
-#### Here you can see the initial approximation as well as 2 support solutions located on the polyhedron of constraints.
-![gui](images/example1_graph.png)
 
 
 # Reference in Russian
