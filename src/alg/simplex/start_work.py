@@ -25,7 +25,6 @@ class SimplexValues:
         lp.print_task()
         canon_lp = cp.deepcopy(lp)
         canon_lp.convert_canon_type()
-        plot_points = list()
         plot_points_to_true_form = list()
 
         # ищем решение канон формы симплекс методом
@@ -39,10 +38,7 @@ class SimplexValues:
         except Exception:
             raise NotSolveSimplex()
 
-        # решение прямой из решения канонической
-        result_X = canon_lp.find_init_X(X)
-
+        result_X = canon_lp.find_init_X(X)  # решение прямой из решения канонической
         for point in plot_points:
             plot_points_to_true_form.append(canon_lp.find_init_X(point))
-
         return np.dot(lp.c.transpose(), result_X), plot_points_to_true_form

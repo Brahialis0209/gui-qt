@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets
 from design_gui.design import Ui_MainWindow
 import numpy as np
 from matplotlib import pylab
-from src.alg.exceptions import InputSimplexException,\
+from src.alg.exceptions import InputSimplexException, \
     SimplexAlgorithmException, NotSolveSimplex
 from src.alg.simplex.start_work import SimplexValues
 
@@ -24,15 +24,9 @@ class MyWindow(QtWidgets.QMainWindow):
         self.start_ui()
 
     def start_ui(self):
-        # выбор числа переменных
-        self.ui.comboBox_columns.addItems(self.comboBox_columns_values)
-
-        # выбор числа строк
-        self.ui.comboBox_lines.addItems(self.comboBox_columns_values)
-
-        # до начала ввода размерности не показываем ввод матрицы и функций
-        self.hide_labels()
-
+        self.ui.comboBox_columns.addItems(self.comboBox_columns_values)  # выбор числа переменных
+        self.ui.comboBox_lines.addItems(self.comboBox_columns_values)  # выбор числа строк
+        self.hide_labels()  # до начала ввода размерности не показываем ввод матрицы и функций
         # кнопки (отправка сигнала в...)
         self.ui.pushButton_insert_dimencsion.clicked.connect(
             self.btn_clicked_dimensions)
@@ -107,7 +101,6 @@ class MyWindow(QtWidgets.QMainWindow):
     def btn_clicked_dimensions(self):
         self.clear_labels()  # нужно если я уже посчитал что-то и
         # ввел новую размерность, тогда лишнее останется
-
         self.N = int(self.ui.comboBox_columns.currentText())
         self.M = int(self.ui.comboBox_lines.currentText())
 
@@ -180,7 +173,7 @@ class MyWindow(QtWidgets.QMainWindow):
                     object_name="коффициенты для функции цели.")
 
         for i in range(self.N):
-            signs[i] = self.ui.tableWidget_A.cellWidget(i, self.N)\
+            signs[i] = self.ui.tableWidget_A.cellWidget(i, self.N) \
                 .currentText()
 
         for i in range(self.M):
@@ -191,10 +184,10 @@ class MyWindow(QtWidgets.QMainWindow):
                     object_name="правую часть множества ограничений.")
 
         for i in range(self.N):
-            var_signs[i] = self.ui.tableWidget_limit_value.\
+            var_signs[i] = self.ui.tableWidget_limit_value. \
                 cellWidget(0, i).currentText()
 
-        extreme = self.ui.tableWidget_function.cellWidget(0, self.N)\
+        extreme = self.ui.tableWidget_function.cellWidget(0, self.N) \
             .currentText()
         return c, extreme, A, signs, b, var_signs
 

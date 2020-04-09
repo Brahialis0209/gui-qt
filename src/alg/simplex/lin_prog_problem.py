@@ -72,16 +72,13 @@ class LinearProgramProblem:
 
     def create_dual_lp(self):
         self.sort_conditions()
-
         A_dual = self.A.transpose()
         b_dual = self.c
         c_dual = self.b
-
         if self.extr == 'max':
             extr_dual = 'min'
         else:
             extr_dual = 'max'
-
         lim_cnt_dual, var_cnt_dual = A_dual.shape
         var_signs_dual = list('any' for _ in range(var_cnt_dual))
         signs_dual = list('=' for _ in range(lim_cnt_dual))
@@ -140,10 +137,8 @@ class LinearProgramProblem:
         for i in range(columns):
             if result_X[i] == 0:
                 not_equal_lim.append(i)
-
         A = cp.deepcopy(self.A.transpose())
         c = cp.deepcopy(self.c)
-
         null_y.reverse()
         not_equal_lim.reverse()
 
@@ -152,7 +147,6 @@ class LinearProgramProblem:
         for id in not_equal_lim:
             A = np.delete(A, id, axis=0)
             c = np.delete(c, id)
-
         sub_Y = np.linalg.solve(A, c)
 
         for id, i in enumerate(not_null_y):

@@ -7,12 +7,10 @@ from src.alg.exceptions import SimplexAlgorithmException, \
 
 def del_null(A, c):
     null_id = list()
-
     for id, column in enumerate(A):
         if all_null(column):
             null_id.append(id)
     null_id.reverse()
-
     for id in null_id:
         A = np.delete(A, id, axis=0)
         c = np.delete(c, id)
@@ -37,11 +35,9 @@ def plusList(ref_vector):
 def artificial_basis(A, b, c):
     rows, columns = A.shape
     rank = np.linalg.matrix_rank(A)
-
     if rank != rows:
         print("error")
         raise NotSolveSimplex
-
     E = np.eye(rows)
     sub_A = np.append(A, E, axis=1)
     arr_zero = np.zeros(columns, float)
@@ -59,7 +55,6 @@ def pos_vector(vector):
 
 def find_new_basis(N_k, index, L, A):
     sub_A = list()
-
     for i in index:
         for j in N_k:
             if j != i:
@@ -77,12 +72,9 @@ def find_new_basis(N_k, index, L, A):
 def find_A_N(A, A_N, N_k, N_null_index):
     new_M, new_N = A_N.shape
     delta = new_M - new_N
-
     if delta == 0:
         return A_N, N_k
-
     id_A = list(it.combinations(N_null_index, delta))
-
     for id in id_A:
         sub_A = list()
         for column in A_N.transpose():
@@ -100,13 +92,11 @@ def find_A_N(A, A_N, N_k, N_null_index):
 # вычисление обратной
 def find_new_B(B, N_k, i_k, sub_u):
     F = np.eye(len(N_k))
-
     for id in range(len(N_k)):
         if F[id][N_k.index(i_k)] != 1:
             F[id][N_k.index(i_k)] = -sub_u[id] / sub_u[N_k.index(i_k)]
         else:
             F[id][N_k.index(i_k)] = 1 / sub_u[N_k.index(i_k)]
-
     new_B = np.dot(F, B)
     return new_B
 
@@ -137,24 +127,20 @@ def main_algorithm(N_k, A, c, ref_vector, B):
     c_L = np.array(c_L)
 
     Y = np.dot(c_N.transpose(), B)
-
     d_L = c_L - np.dot(Y, A_L)
+    j_k = 0
 
     for id, d in enumerate(d_L):
         if abs(d) <= 1e-14:
             d_L[id] = 0
-
     if pos_vector(d_L):
         return True, ref_vector, N_k, B
-
-    j_k = 0
 
     for id, d in enumerate(d_L):
         if d < 0:
             j_k = L[id]
             break
     A_j = A.transpose()[j_k]
-
     u = np.zeros(N)
     sub_u = np.dot(B, A_j.transpose())
     i_k_list = list()
@@ -170,7 +156,6 @@ def main_algorithm(N_k, A, c, ref_vector, B):
         return False, np.zeros(N), N_k, B
 
     i_k = i_k_list[0]
-
     coeff = ref_vector[i_k] / u[i_k]
 
     for i in i_k_list:
@@ -179,7 +164,6 @@ def main_algorithm(N_k, A, c, ref_vector, B):
             coeff = ref_vector[i_k] / u[i_k]
 
     N_plus_index = plusList(ref_vector)
-
     B = find_new_B(B, N_k, i_k, sub_u)
 
     if len(N_plus_index) != len(N_k):
@@ -190,7 +174,6 @@ def main_algorithm(N_k, A, c, ref_vector, B):
         for id in index:
             if u[id] > 0:
                 N_k = find_new_basis(N_k, index, L, A)
-
                 return False, ref_vector, N_k, B
 
     new_ref_vector = ref_vector - coeff * u
