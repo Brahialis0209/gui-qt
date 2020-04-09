@@ -1,22 +1,21 @@
-# GUI-qt
 
-The simplex method is an iterative process of the directed solution of a system of equations in steps,
-which begins with a supporting solution and, in search of a better option,
-moves along the corner points of the region of an acceptable solution that improves
-the value of the objective function until the objective function reaches the optimal value.
-
-
-Instruction:
-1. Select the number of rows and variables
-2. Enter coefficients for the set of constraints
-3. Enter coefficients for the goal function
-4. Enter constraints on the variables
-
-
-If the data is correct, the program will calculate the answer,
-otherwise it will tell you where you entered it incorrectly.
-
-
-If the problem has a solution and there are exactly 2 variables,
-then you can depict the search for the optimal plan on the graph,
-the points will move along the vertices of the closed polygon.
+# Reference in Russian
+Это приложение для решения задачи линейного программировани симплекс-методом.
+## Требования
+- Python 3.6-3.8
+- пакеты, указанные в `requirements.txt`
+## Установка, запуск, удаление
+- создайте копию репозитория: `git clone https://gitlab.com/Brahialis0209/gui-qt.git`
+- откройте папку `gui-qt` как проект PyCharm и запустите `src/main.py`
+либо, находясь в папке `gui-qt/src`, исполните команду: `python main.py`
+## Работа с приложением
+- Сперва нужно выбрать число строк(число ограничений), число переменных и нажать `Ввести`.
+- Далее предлагается ввести коэффициенты для множества ограничений, для функции цели и ограничения на неизвестные,<br>
+ колонка `extreme` отвечает за максимизацию или минимизацию вашей целевой функции.
+- Далее, если вы ввели данные корректно, нажмите `Посчитать`.<br> В случае, если ввод был некорректным(буква вместо числа) -
+  вы получите сообщение об ошибке и о том где именно был непраильный ввод.
+- При корректных данных вы получите ответ.
+- Также, если размерность задачи = 2, (две переменные) то приложение предложит построить график итераций<br>
+  при нахождении оптимального решения.
+- Для увеличения изображения используйте лупу в панели.
+### Пример

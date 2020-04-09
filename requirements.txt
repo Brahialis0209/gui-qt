@@ -1,2 +1,4 @@
 flake8
 numpy
+PyQt5
+matplotlib

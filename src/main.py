@@ -1,4 +1,5 @@
 import sys
+sys.path.append('../')
 from PyQt5 import QtWidgets
 from src.alg.window_settings import MyWindow
 
