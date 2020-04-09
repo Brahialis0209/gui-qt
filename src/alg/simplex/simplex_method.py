@@ -72,7 +72,7 @@ def find_A_N(A, A_N, N_k, N_null_index):
     new_M, new_N = A_N.shape
     delta = new_M - new_N
     if delta == 0:
-        return
+        return N_k
     column_A_combinations = list(it.combinations(N_null_index, delta))
     for column_A in column_A_combinations:
         sub_A = list()
@@ -84,6 +84,7 @@ def find_A_N(A, A_N, N_k, N_null_index):
         if np.linalg.det(sub_A) != 0:
             for index in column_A:
                 N_k.append(index)
+            return N_k
 
 
 # вычисление обратной
@@ -200,7 +201,7 @@ def first_step(A, ref_vector):
     A_N = np.array(A_N)
     A_N = A_N.transpose()
     B = np.eye(M)
-    find_A_N(A, A_N, N_k, N_null_index)
+    N_k = find_A_N(A, A_N, N_k, N_null_index)
     return N_k, B
 
 
