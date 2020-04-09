@@ -251,9 +251,9 @@ def start_simplex_method(A, b, c):
     except NotSolveSimplex:
         raise NotSolveSimplex()
     N_k, B = first_step(sub_A, ref_vector)
-    ref_vector, B = start_alg_iterations(N_k, ref_vector, B, sub_A, sub_c, plot_points)
+    ref_vector, B, N_k = start_alg_iterations(N_k, ref_vector, B, sub_A, sub_c, plot_points)
     ref_vector, B = transform_ref_vector(ref_vector, B, N_k, A)
-    ref_vector, B = start_alg_iterations(N_k, ref_vector, B, A, c, plot_points)
+    ref_vector, B, N_k = start_alg_iterations(N_k, ref_vector, B, A, c, plot_points)
     return ref_vector, plot_points
 
 
@@ -265,4 +265,4 @@ def start_alg_iterations(N_k, ref_vector, B, A, c, plot_points):
         if all_null(ref_vector):
             raise SimplexAlgorithmException()
         plot_points.append(ref_vector)
-    return ref_vector, B
+    return ref_vector, B, N_k
