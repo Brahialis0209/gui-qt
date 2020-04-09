@@ -110,7 +110,6 @@ class LinearProgramProblem:
 
     def find_init_X(self, X):
         init_X = np.zeros(len(self.conf_X))
-
         for id, nums in enumerate(self.conf_X):
             if len(nums) == 1:
                 init_X[id] = X[nums[0]]

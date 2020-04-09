@@ -36,7 +36,6 @@ def artificial_basis(A, b, c):
     rows, columns = A.shape
     rank = np.linalg.matrix_rank(A)
     if rank != rows:
-        print("error")
         raise NotSolveSimplex
     E = np.eye(rows)
     sub_A = np.append(A, E, axis=1)
@@ -103,19 +102,14 @@ def find_new_B(B, N_k, i_k, sub_u):
 
 def main_algorithm(N_k, A, c, ref_vector, B):
     M, N = A.shape
-    A_N = list()
     c_N = list()
     L = list()
     A_L = list()
     c_L = list()
 
     for id in N_k:
-        A_N.append(A.transpose()[id])
         c_N.append(c[id])
     c_N = np.array(c_N)
-    A_N = np.array(A_N)
-    A_N = A_N.transpose()
-
     for id in range(N):
         if id not in N_k:
             L.append(id)
@@ -125,7 +119,6 @@ def main_algorithm(N_k, A, c, ref_vector, B):
     A_L = np.array(A_L)
     A_L = A_L.transpose()
     c_L = np.array(c_L)
-
     Y = np.dot(c_N.transpose(), B)
     d_L = c_L - np.dot(Y, A_L)
     j_k = 0
@@ -133,6 +126,7 @@ def main_algorithm(N_k, A, c, ref_vector, B):
     for id, d in enumerate(d_L):
         if abs(d) <= 1e-14:
             d_L[id] = 0
+
     if pos_vector(d_L):
         return True, ref_vector, N_k, B
 
@@ -140,6 +134,7 @@ def main_algorithm(N_k, A, c, ref_vector, B):
         if d < 0:
             j_k = L[id]
             break
+
     A_j = A.transpose()[j_k]
     u = np.zeros(N)
     sub_u = np.dot(B, A_j.transpose())
@@ -151,10 +146,8 @@ def main_algorithm(N_k, A, c, ref_vector, B):
             i_k_list.append(n_k)
 
     u[j_k] = -1
-
     if len(i_k_list) == 0:
         return False, np.zeros(N), N_k, B
-
     i_k = i_k_list[0]
     coeff = ref_vector[i_k] / u[i_k]
 
@@ -187,7 +180,6 @@ def first_step(A, c, ref_vector):
     N_null_index = list()
     N_plus_index = list()
     A_N = list()
-
     for id, x in enumerate(ref_vector):
         if x > 0:
             N_plus_index.append(id)
@@ -195,10 +187,8 @@ def first_step(A, c, ref_vector):
             A_N.append(A.transpose()[id])
         elif x == 0:
             N_null_index.append(id)
-
     A_N = np.array(A_N)
     A_N = A_N.transpose()
-
     B = np.eye(M)
     A_N, N_k = find_A_N(A, A_N, N_k, N_null_index)
     return N_k, ref_vector, B
@@ -217,14 +207,11 @@ def transform_ref_vector(ref_vector, B, N_k, A):
         new_B.append(B[N_k_old.index(id), :])
     new_B = np.array(new_B)
     B = new_B
-
     for id in range(N):
         if id not in N_k:
             L.append(id)
-
     A_N = np.array(A_N).transpose()
     E = np.eye(M)
-
     for i in range(M):
         for j in range(M):
             if np.array_equal(A_N[:, i], E[:, j]):
@@ -250,25 +237,20 @@ def start_simplex_method(A, b, c):
         raise NotSolveSimplex()
 
     N_k, ref_vector, B = first_step(sub_A, sub_c, ref_vector)
-    end = False
-
-    while not end:
-        end, ref_vector, N_k, B = main_algorithm(N_k, sub_A,
-                                                 sub_c, ref_vector, B)
-        if all_null(ref_vector):
-            print('Error')
-            raise SimplexAlgorithmException()
-        plot_points.append(ref_vector)
+    ref_vector, N_k, B = start_alg_iterations(N_k, ref_vector, B, sub_A, sub_c, plot_points)
 
     ref_vector, B, N_k = transform_ref_vector(ref_vector, B, N_k, A)
-    end = False
+    ref_vector, N_k, B = start_alg_iterations(N_k, ref_vector, B, A, c, plot_points)
 
+    return ref_vector, plot_points
+
+
+def start_alg_iterations(N_k, ref_vector, B, A, c, plot_points):
+    end = False
     while not end:
         end, ref_vector, N_k, B = main_algorithm(N_k, A,
                                                  c, ref_vector, B)
         if all_null(ref_vector):
-            print('Error')
             raise SimplexAlgorithmException()
         plot_points.append(ref_vector)
-
-    return ref_vector, plot_points
+    return ref_vector, N_k, B
