@@ -127,7 +127,9 @@ def simplex_dates_L_dimension(N_k, A, c, B):
 
 def calc_j_k(d_L, L):
     for index, d in enumerate(d_L):
-        return L[index] if d < 0 else 0
+        if d < 0:
+            return L[index]
+    return 0
 
 
 def calc_list_i_k(N_k, sub_u, u):
