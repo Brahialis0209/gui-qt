@@ -161,7 +161,7 @@ def main_algorithm(N_k, A, c, ref_vector, B):
     d_L, L = simplex_dates_L_dimension(N_k, A, c, B)
     update_d_L(d_L)
     if pos_vector(d_L):
-        return True, ref_vector, B
+        return True, ref_vector, B, N_k
     j_k = calc_j_k(d_L, L)
     A_j = A.transpose()[j_k]
     u = np.zeros(N)
@@ -169,7 +169,7 @@ def main_algorithm(N_k, A, c, ref_vector, B):
     i_k_list = calc_list_i_k(N_k, sub_u, u)
     u[j_k] = -1
     if len(i_k_list) == 0:
-        return False, np.zeros(N), B
+        return False, np.zeros(N), B, N_k
     coefficient, i_k = calc_coefficients(i_k_list, ref_vector, u)
     N_plus_index = plusList(ref_vector)
     B = find_new_B(B, N_k, i_k, sub_u)
@@ -260,7 +260,7 @@ def start_alg_iterations(N_k, ref_vector, B, A, c, plot_points):
     end = False
     while not end:
         end, ref_vector, B, N_k = main_algorithm(N_k, A,
-                                            c, ref_vector, B)
+                                                 c, ref_vector, B)
         if all_null(ref_vector):
             raise SimplexAlgorithmException()
         plot_points.append(ref_vector)
