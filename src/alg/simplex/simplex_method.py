@@ -64,6 +64,7 @@ def find_new_basis(N_k, index, L, A):
             new_A_N = np.array(new_A_N)
             if np.linalg.det(new_A_N) != 0:
                 N_k[N_k.index(i)] = id
+                return N_k
         N_k.append(i)
 
 
@@ -176,11 +177,11 @@ def main_algorithm(N_k, A, c, ref_vector, B):
         indices_not_plus_element = calc_indices_not_plus_element(N_k, N_plus_index)
         for index in indices_not_plus_element:
             if u[index] > 0:
-                find_new_basis(N_k, indices_not_plus_element, L, A)
-                return False, ref_vector, B
+                N_k = find_new_basis(N_k, indices_not_plus_element, L, A)
+                return False, ref_vector, B, N_k
     new_ref_vector = ref_vector - coefficient * u
     N_k[N_k.index(i_k)] = j_k
-    return False, new_ref_vector, B
+    return False, new_ref_vector, B, N_k
 
 
 def first_step(A, ref_vector):
@@ -258,7 +259,7 @@ def start_simplex_method(A, b, c):
 def start_alg_iterations(N_k, ref_vector, B, A, c, plot_points):
     end = False
     while not end:
-        end, ref_vector, B = main_algorithm(N_k, A,
+        end, ref_vector, B, N_k = main_algorithm(N_k, A,
                                             c, ref_vector, B)
         if all_null(ref_vector):
             raise SimplexAlgorithmException()
