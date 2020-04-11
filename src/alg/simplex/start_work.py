@@ -6,7 +6,6 @@ from src.alg.exceptions import SimplexAlgorithmException, \
 from src.alg.simplex.simplex_method import start_simplex_method
 
 
-# Задача линейного программирования
 class SimplexValues:
     def __init__(self, c, extreme, A, signs, b, var_signs):
         self.c = np.array(c, float)

@@ -2,12 +2,14 @@
 # Reference in English
 This application is for solving the linear programming problem by the simplex method.
 ## Requirements
-- Python 3.6-3.8
+- Python 3.6-...
 - packages indicated in `requirements.txt`
 ## Install, launch, uninstall
-- create a copy of the repository: `git clone https://gitlab.com/Brahialis0209/gui-qt.git`
-- open the `gui-qt` folder as a PyCharm project and run `src/main.py`
-or, being in the `gui-qt/src` folder, execute the command:`python main.py`
+1. Create a copy of the repository: `https://gitlab.com/Brahialis0209/shading-graph-vertices.git`
+2. Go to the project folder - cd [path to the directory in which the project lies]/gui-qt
+3. Install the missing packages - pip install -r requirements.txt
+4. Go to the src directory - cd src
+4. Run the application - python main.py
 ## Work with the application
 - First you need to select the number of lines (number of restrictions), the number of variables and press `Ввести`.
 - Next, it is proposed to introduce coefficients for the set of constraints, for the objective function and restrictions on the unknown, <br>
@@ -23,12 +25,14 @@ or, being in the `gui-qt/src` folder, execute the command:`python main.py`
 # Reference in Russian
 Это приложение для решения задачи линейного программирования симплекс-методом.
 ## Требования
-- Python 3.6-3.8
+- Python 3.6-...
 - пакеты, указанные в `requirements.txt`
 ## Установка, запуск, удаление
-- создайте копию репозитория: `git clone https://gitlab.com/Brahialis0209/gui-qt.git`
-- откройте папку `gui-qt` как проект PyCharm и запустите `src/main.py`
-либо, находясь в папке `gui-qt/src`, исполните команду: `python main.py`
+1. Cоздать копию репозитория: `https://gitlab.com/Brahialis0209/shading-graph-vertices.git`
+2. Перейти в папку проекта - cd [путь к директории в которой лежит проект]/gui-qt
+3. Установить недостающие пакеты - pip install -r requirements.txt
+4. Перейти в диреторию src - cd src
+4. Запустить приложение - python main.py
 ## Работа с приложением
 - Сперва нужно выбрать число строк(число ограничений), число переменных и нажать `Ввести`.
 - Далее предлагается ввести коэффициенты для множества ограничений, для функции цели и ограничения на неизвестные,<br>
