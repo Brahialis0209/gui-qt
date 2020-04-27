@@ -3,17 +3,30 @@ import unittest
 
 sys.path.append('../')
 
-from tests.dates.test_dates import give_second_test_dates, give_first_test_dates
-from tests.example import solve_example
+from tests.dates.test_dates import give_four_dim, give_two_dim
+from src.alg.simplex.simplex_method import start_simplex_method
+from src.alg.simplex.lin_prog_problem import LinearProgramProblem, np
+import copy as cp
+
+
+def solve_example(*example_dates):
+    lp = LinearProgramProblem(*example_dates)
+    canon_lp = cp.deepcopy(lp)
+    canon_lp.convert_canon_type()
+    X, plot_points = start_simplex_method(canon_lp.A, canon_lp.b,
+                                          canon_lp.c)
+    result_X_example = canon_lp.find_init_X(X)
+    decision_example: float = float(np.dot(lp.c.transpose(), result_X_example))
+    return round(decision_example, 1)
 
 
 class TestGui(unittest.TestCase):
 
-    def test_first(self):
-        self.assertEqual(solve_example(*give_first_test_dates()), 48.5)
+    def test_four_dim(self):
+        self.assertEqual(solve_example(*give_four_dim()), 48.5)
 
-    def test_second(self):
-        self.assertEqual(solve_example(*give_second_test_dates()), 16.4)
+    def test_two_dim(self):
+        self.assertEqual(solve_example(*give_two_dim()), 16.4)
 
 
 if __name__ == '__main__':

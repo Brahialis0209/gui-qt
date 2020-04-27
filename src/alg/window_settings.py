@@ -12,15 +12,11 @@ class MyWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.N = 0
-        self.M = 0
         self.comboBox_signs = ["=", ">=", "<="]
         self.comboBox_extreme = ["min", "max"]
         self.comboBox_columns_values = ["1", "2", "3", "4",
                                         "5", "6", "7"]
         self.comboBox_value_limits = ["positive", "any"]
-        self.plot_points = None
-        self.simplex_example = None
         self.start_ui()
 
     def start_ui(self):

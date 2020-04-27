@@ -1,7 +1,7 @@
 from src.alg.simplex.lin_prog_problem import np
 
 
-def give_first_test_dates():
+def give_four_dim():
     c = np.array([2, 3, 1, 5], float)
     extreme = 'max'
     A = np.array([[-2, 6, 1, 0],
@@ -14,7 +14,7 @@ def give_first_test_dates():
     return c, extreme, A, signs, b, var_signs
 
 
-def give_second_test_dates():
+def give_two_dim():
     c = np.array([20, 20], float)
     extreme = 'min'
     A = np.array([[4, 2],

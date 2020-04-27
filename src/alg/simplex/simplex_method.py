@@ -87,8 +87,7 @@ def find_A_N(A, A_N, N_k, N_null_index):
             return N_k
 
 
-# вычисление обратной
-def find_new_B(B, N_k, i_k, sub_u):
+def find_new_B(B, N_k, i_k, sub_u):  # вычисление обратной
     F = np.eye(len(N_k))
     for id in range(len(N_k)):
         if F[id][N_k.index(i_k)] != 1:
