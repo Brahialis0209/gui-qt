@@ -13,7 +13,7 @@ app_test:
     stage: test
     script:
           - echo "Tests started..."
-          - python -m unittest discover 'tests/' '*test.py'
+          - python -m unittest discover 'tests/'
           - echo "Tests over."
 
 
