@@ -118,7 +118,7 @@ def simplex_dates_L_dimension(N_k, A, c, B):
 
 def calc_j_k(d_L, L):
     neg_elements_d_L = list(filter(lambda x: x < 0, d_L))
-    return L[d_L.index(neg_elements_d_L[0])] if neg_elements_d_L else 0
+    return L[list(d_L).index(neg_elements_d_L[0])] if neg_elements_d_L else 0
 
 
 def calc_list_i_k(N_k, sub_u, u):
