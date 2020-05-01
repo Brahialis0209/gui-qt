@@ -3,7 +3,7 @@ from design_gui.design import Ui_MainWindow
 import numpy as np
 from matplotlib import pylab
 from src.alg.exceptions import InputSimplexException, \
-    SimplexAlgorithmException, NotSolveSimplex
+    SimplexAlgorithmException, NotSolveSimplex, IncompleteTaskRank, LoopingAlgorithmException
 from src.alg.simplex.start_work import SimplexValues
 
 
@@ -14,7 +14,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.comboBox_signs = ["=", ">=", "<="]
         self.comboBox_extreme = ["min", "max"]
-        self.comboBox_columns_values = ["1", "2", "3", "4",
+        self.comboBox_columns_values = ["2", "3", "4",
                                         "5", "6", "7"]
         self.comboBox_value_limits = ["positive", "any"]
         self.start_ui()
@@ -152,13 +152,13 @@ class MyWindow(QtWidgets.QMainWindow):
                     A[i][j] = float(self.ui.tableWidget_A.item(i, j).text())
                 except Exception:
                     raise InputSimplexException(
-                        object_name="coefficients for goal function.")
+                        object_name="coefficients for the constraint matrix.")
         for i in range(self.N):
             try:
                 c[i] = float(self.ui.tableWidget_function.item(0, i).text())
             except Exception:
                 raise InputSimplexException(
-                    object_name="коффициенты для функции цели.")
+                    object_name="coefficients for goal function.")
         for i in range(self.N):
             signs[i] = self.ui.tableWidget_A.cellWidget(i, self.N) \
                 .currentText()
@@ -179,7 +179,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.label_solve.hide()
         self.ui.pushButton_plot.hide()
         self.ui.label_error_message.show()
-        self.ui.label_error_message.setText(exception.Message())
+        self.ui.label_error_message.setText(exception.message())
         self.ui.label_error_message.adjustSize()
 
     def print_solve_answer(self, result):
@@ -200,10 +200,8 @@ class MyWindow(QtWidgets.QMainWindow):
 
         try:
             result, self.plot_points = self.simplex_example.extreme_value()
-        except SimplexAlgorithmException as exception:
+        except (SimplexAlgorithmException, IncompleteTaskRank, NotSolveSimplex, LoopingAlgorithmException) as exception:
             self.print_error_message(exception)
             return
-        except NotSolveSimplex as exception:
-            self.print_error_message(exception)
-            return
+
         self.print_solve_answer(result)

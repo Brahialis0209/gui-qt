@@ -2,7 +2,7 @@ import numpy as np
 import copy as cp
 from src.alg.simplex.lin_prog_problem import LinearProgramProblem
 from src.alg.exceptions import SimplexAlgorithmException, \
-    NotSolveSimplex
+    NotSolveSimplex, IncompleteTaskRank, LoopingAlgorithmException
 from src.alg.simplex.simplex_method import start_simplex_method
 
 
@@ -29,8 +29,11 @@ class SimplexValues:
                                                   canon_lp.c)
         except SimplexAlgorithmException:
             raise SimplexAlgorithmException()
+        except IncompleteTaskRank:
+            raise IncompleteTaskRank()
         except Exception:
-            raise NotSolveSimplex()
+            raise LoopingAlgorithmException()
+
         result_X = canon_lp.find_init_X(X)  # решение прямой из решения канонической
         for point in plot_points:
             plot_points_to_true_form.append(canon_lp.find_init_X(point))

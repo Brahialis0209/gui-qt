@@ -9,7 +9,7 @@ from src.alg.simplex.lin_prog_problem import LinearProgramProblem, np
 import copy as cp
 
 
-def solve_example(*example_dates):
+def solve(*example_dates):
     lp = LinearProgramProblem(*example_dates)
     canon_lp = cp.deepcopy(lp)
     canon_lp.convert_canon_type()
@@ -23,10 +23,10 @@ def solve_example(*example_dates):
 class TestGui(unittest.TestCase):
 
     def test_four_dim(self):
-        self.assertEqual(solve_example(*give_four_dim()), 48.5)
+        self.assertEqual(solve(*give_four_dim()), 48.5)
 
     def test_two_dim(self):
-        self.assertEqual(solve_example(*give_two_dim()), 16.4)
+        self.assertEqual(solve(*give_two_dim()), 16.4)
 
 
 if __name__ == '__main__':
