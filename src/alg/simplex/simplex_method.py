@@ -8,13 +8,17 @@ from src.alg.exceptions import SimplexAlgorithmException, \
 def del_null(A, c):
     null_ind = list()
     for index, column in enumerate(A):
-        if not list(filter(lambda x: x != 0, column)):  # all column components null
+        if all_null(column):  # all column components null
             null_ind.append(index)
     null_ind.reverse()
     for index in null_ind:
         A = np.delete(A, index, axis=0)
         c = np.delete(c, index)
     return A, c
+
+
+def all_null(column):
+    return not list(filter(lambda x: x != 0, column))
 
 
 def plusList(ref_vector):
@@ -25,7 +29,7 @@ def plusList(ref_vector):
     return N_plus_index
 
 
-def artificial_basis(A, b, c):
+def artificial_basis(A, b):
     rows, columns = A.shape
     rank = np.linalg.matrix_rank(A)
     if rank != rows:
