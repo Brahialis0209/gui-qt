@@ -90,8 +90,9 @@ def find_new_B(B, N_k, i_k, sub_u):  # inverse calculation
 
 
 def update_d_L(d_L):
+    eps = 1e-14
     for index, d in enumerate(d_L):
-        if abs(d) <= 1e-14:
+        if abs(d) <= eps:
             d_L[index] = 0
 
 
@@ -116,10 +117,8 @@ def simplex_dates_L_dimension(N_k, A, c, B):
 
 
 def calc_j_k(d_L, L):
-    for index, d in enumerate(d_L):
-        if d < 0:
-            return L[index]
-    return 0
+    neg_elements_d_L = list(filter(lambda x: x < 0, d_L))
+    return L[d_L.index(neg_elements_d_L[0])] if neg_elements_d_L else 0
 
 
 def calc_list_i_k(N_k, sub_u, u):
