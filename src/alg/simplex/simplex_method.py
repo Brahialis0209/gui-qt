@@ -44,26 +44,22 @@ def artificial_basis(A, b):
 
 def pos_vector(vector):
     return not list(filter(lambda x: x < 0, vector))
-    # for x in vector:
-    #     if x < 0:
-    #         return False
-    # return True
 
 
-def find_new_basis(N_k, index, L, A):
+def find_new_basis(N_k, indices_not_plus_element, L, A):
     sub_A = list()
-    for i in index:
-        for j in N_k:
-            if j != i:
-                sub_A.append(A.transpose()[j])
-        for ind in L:
+    for ind_not_plus_element in indices_not_plus_element:
+        for ind_N_k in N_k:
+            if ind_N_k != ind_not_plus_element:
+                sub_A.append(A.transpose()[ind_N_k])
+        for ind_L in L:
             new_A_N = cp.deepcopy(sub_A)
-            new_A_N.append(A.transpose()[ind])
+            new_A_N.append(A.transpose()[ind_L])
             new_A_N = np.array(new_A_N)
             if np.linalg.det(new_A_N) != 0:
-                N_k[N_k.index(i)] = ind
+                N_k[N_k.index(ind_not_plus_element)] = ind_L
                 return N_k
-        N_k.append(i)
+        N_k.append(ind_not_plus_element)
 
 
 def find_A_N(A, A_N, N_k, N_null_index):
