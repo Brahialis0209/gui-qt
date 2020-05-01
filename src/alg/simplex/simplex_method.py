@@ -8,7 +8,7 @@ from src.alg.exceptions import SimplexAlgorithmException, \
 def del_null(A, c):
     null_ind = list()
     for index, column in enumerate(A):
-        if all_null(column):
+        if not list(filter(lambda x: x != 0, column)):
             null_ind.append(index)
     null_ind.reverse()
     for index in null_ind:
