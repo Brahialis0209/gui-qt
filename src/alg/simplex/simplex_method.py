@@ -21,7 +21,7 @@ def all_null(column):
     return not list(filter(lambda x: x != 0, column))
 
 
-def plusList(ref_vector):
+def plus_list(ref_vector):
     N_plus_index = []
     for index, x in enumerate(ref_vector):
         if x > 0:
@@ -81,15 +81,12 @@ def find_A_N(A, A_N, N_k, N_null_index):
             return N_k
 
 
-def find_new_B(B, N_k, i_k, sub_u):  # вычисление обратной
+def find_new_B(B, N_k, i_k, sub_u):  # inverse calculation
     F = np.eye(len(N_k))
     for ind in range(len(N_k)):
-        if F[ind][N_k.index(i_k)] != 1:
-            F[ind][N_k.index(i_k)] = -sub_u[ind] / sub_u[N_k.index(i_k)]
-        else:
-            F[ind][N_k.index(i_k)] = 1 / sub_u[N_k.index(i_k)]
-    new_B = np.dot(F, B)
-    return new_B
+        column_element_for_F = -sub_u[ind] if F[ind][N_k.index(i_k)] != 1 else 1
+        F[ind][N_k.index(i_k)] = column_element_for_F / sub_u[N_k.index(i_k)]
+    return np.dot(F, B)
 
 
 def update_d_L(d_L):
@@ -167,7 +164,7 @@ def main_algorithm(N_k, A, c, ref_vector, B):
     if len(i_k_list) == 0:
         return False, np.zeros(N), B, N_k
     coefficient, i_k = calc_coefficients(i_k_list, ref_vector, u)
-    N_plus_index = plusList(ref_vector)
+    N_plus_index = plus_list(ref_vector)
     B = find_new_B(B, N_k, i_k, sub_u)
     if len(N_plus_index) != len(N_k):
         indices_not_plus_element = calc_indices_not_plus_element(N_k, N_plus_index)
