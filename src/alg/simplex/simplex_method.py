@@ -6,12 +6,12 @@ from src.alg.exceptions import SimplexAlgorithmException, \
 
 
 def del_null(A, c):
-    null_id = list()
+    null_ind = list()
     for index, column in enumerate(A):
         if all_null(column):
-            null_id.append(index)
-    null_id.reverse()
-    for index in null_id:
+            null_ind.append(index)
+    null_ind.reverse()
+    for index in null_ind:
         A = np.delete(A, index, axis=0)
         c = np.delete(c, index)
     return A, c
@@ -58,12 +58,12 @@ def find_new_basis(N_k, index, L, A):
         for j in N_k:
             if j != i:
                 sub_A.append(A.transpose()[j])
-        for id in L:
+        for ind in L:
             new_A_N = cp.deepcopy(sub_A)
-            new_A_N.append(A.transpose()[id])
+            new_A_N.append(A.transpose()[ind])
             new_A_N = np.array(new_A_N)
             if np.linalg.det(new_A_N) != 0:
-                N_k[N_k.index(i)] = id
+                N_k[N_k.index(i)] = ind
                 return N_k
         N_k.append(i)
 
@@ -89,11 +89,11 @@ def find_A_N(A, A_N, N_k, N_null_index):
 
 def find_new_B(B, N_k, i_k, sub_u):  # вычисление обратной
     F = np.eye(len(N_k))
-    for id in range(len(N_k)):
-        if F[id][N_k.index(i_k)] != 1:
-            F[id][N_k.index(i_k)] = -sub_u[id] / sub_u[N_k.index(i_k)]
+    for ind in range(len(N_k)):
+        if F[ind][N_k.index(i_k)] != 1:
+            F[ind][N_k.index(i_k)] = -sub_u[ind] / sub_u[N_k.index(i_k)]
         else:
-            F[id][N_k.index(i_k)] = 1 / sub_u[N_k.index(i_k)]
+            F[ind][N_k.index(i_k)] = 1 / sub_u[N_k.index(i_k)]
     new_B = np.dot(F, B)
     return new_B
 
@@ -192,13 +192,13 @@ def first_step(A, ref_vector):
     N_null_index = list()
     N_plus_index = list()
     A_N = list()
-    for id, x in enumerate(ref_vector):
+    for ind, x in enumerate(ref_vector):
         if x > 0:
-            N_plus_index.append(id)
-            N_k.append(id)
-            A_N.append(A.transpose()[id])
+            N_plus_index.append(ind)
+            N_k.append(ind)
+            A_N.append(A.transpose()[ind])
         elif x == 0:
-            N_null_index.append(id)
+            N_null_index.append(ind)
     A_N = np.array(A_N)
     A_N = A_N.transpose()
     B = np.eye(M)
@@ -221,9 +221,9 @@ def transform_ref_vector(ref_vector, B, N_k, A):
     N_k_old = list(N_k)
     N_k.sort()
     new_B = list()
-    for id in N_k:
-        A_N.append(A.transpose()[id])
-        new_B.append(B[N_k_old.index(id), :])
+    for ind in N_k:
+        A_N.append(A.transpose()[ind])
+        new_B.append(B[N_k_old.index(ind), :])
     B = np.array(new_B)
     L = N_K_dates_L_dimensions(N, N_k)
     A_N = np.array(A_N).transpose()
@@ -231,16 +231,16 @@ def transform_ref_vector(ref_vector, B, N_k, A):
     for i in range(M):
         for j in range(M):
             if np.array_equal(A_N[:, i], E[:, j]):
-                for id in L:
-                    A_N[:, i] = A[:, id]
+                for ind in L:
+                    A_N[:, i] = A[:, ind]
                     if np.linalg.det(A_N) != 0:
                         i_k = N_k[i]
-                        j_k = id
+                        j_k = ind
                         A_j = A.transpose()[j_k]
                         sub_u = np.dot(B, A_j.transpose())
                         B = find_new_B(B, N_k, i_k, sub_u)
                         N_k[i] = j_k
-                        L.remove(id)
+                        L.remove(ind)
                         break
     return ref_vector, B
 
