@@ -43,6 +43,7 @@ def artificial_basis(A, b):
 
 
 def pos_vector(vector):
+    # return not list(filter(lambda x: x < 0, vector))
     for x in vector:
         if x < 0:
             return False
@@ -245,7 +246,7 @@ def transform_ref_vector(ref_vector, B, N_k, A):
 def start_simplex_method(A, b, c):
     plot_points = list()
     try:
-        sub_A, sub_c, ref_vector = artificial_basis(A, b, c)
+        sub_A, sub_c, ref_vector = artificial_basis(A, b)
     except NotSolveSimplex:
         raise NotSolveSimplex()
     N_k, B = first_step(sub_A, ref_vector)
