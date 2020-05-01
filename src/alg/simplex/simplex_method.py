@@ -43,11 +43,11 @@ def artificial_basis(A, b):
 
 
 def pos_vector(vector):
-    # return not list(filter(lambda x: x < 0, vector))
-    for x in vector:
-        if x < 0:
-            return False
-    return True
+    return not list(filter(lambda x: x < 0, vector))
+    # for x in vector:
+    #     if x < 0:
+    #         return False
+    # return True
 
 
 def find_new_basis(N_k, index, L, A):
