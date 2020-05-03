@@ -2,7 +2,7 @@ import numpy as np
 import copy as cp
 from src.alg.simplex.lin_prog_problem import LinearProgramProblem
 from src.alg.exceptions import SimplexAlgorithmException, \
-    NotSolveSimplex, IncompleteTaskRank, LoopingAlgorithmException
+    IncompleteTaskRank, LoopingAlgorithmException
 from src.alg.simplex.simplex_method import start_simplex_method
 
 

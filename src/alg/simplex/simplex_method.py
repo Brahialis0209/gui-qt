@@ -2,7 +2,7 @@ import numpy as np
 import itertools as it
 import copy as cp
 from src.alg.exceptions import SimplexAlgorithmException, \
-    NotSolveSimplex, IncompleteTaskRank
+    IncompleteTaskRank
 
 
 def del_null(A, c):
@@ -90,7 +90,6 @@ def find_new_B(B, N_k, i_k, sub_u):  # inverse calculation
 
 
 def update_d_L(d_L):
-    eps = 1e-14
     for index, d in enumerate(d_L):
         if abs(d) <= eps:
             d_L[index] = 0

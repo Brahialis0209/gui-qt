@@ -1,5 +1,5 @@
 import numpy as np
-
+from src.alg.simplex.config import SimplexConfig
 
 class LinearProgramProblem:
     def __init__(self, c, extr, A, signs, b, var_sings):
@@ -20,29 +20,29 @@ class LinearProgramProblem:
         return self.A, self.b, self.c
 
     def convert_extr(self):
-        if self.extr == 'max':
+        if self.extr == SimplexConfig.maximum:
             self.c = (-1) * self.c
-            self.extr = 'min'
+            self.extr = SimplexConfig.minimum
 
     def convert_limit_sign(self):
         for ind, sign in enumerate(self.signs):
-            if sign == '<=' or sign == '>=':
-                self.var_signs.append('positive')
+            if sign == SimplexConfig.loose_less or sign == SimplexConfig.loose_more:
+                self.var_signs.append(SimplexConfig.positive)
                 self.var_cnt += 1
                 self.c = np.append(self.c, 0)
                 self.A = np.append(
                     self.A, np.zeros((self.lim_cnt, 1), float), axis=1)
-                if sign == '<=':
+                if sign == SimplexConfig.loose_less:
                     self.A[ind][self.var_cnt - 1] = 1
-                if sign == '>=':
+                if sign == SimplexConfig.loose_more:
                     self.A[ind][self.var_cnt - 1] = -1
-                self.signs[ind] = '='
+                self.signs[ind] = SimplexConfig.equal
 
     def convert_var_sign(self):
         for ind, var in enumerate(self.var_signs):
-            if var == 'any':
-                self.var_signs[ind] = 'positive'
-                self.var_signs.append('positive')
+            if var == SimplexConfig.any:
+                self.var_signs[ind] = SimplexConfig.positive
+                self.var_signs.append(SimplexConfig.positive)
                 self.conf_X[ind].append(self.var_cnt)
                 self.var_cnt += 1
                 self.c = np.append(self.c, self.c[ind] * (-1))
@@ -59,14 +59,14 @@ class LinearProgramProblem:
 
     def sort_conditions(self):
         for ind, sign in enumerate(self.signs):
-            if (sign == '<=' and self.extr == 'min') or \
-                    (sign == '>=' and self.extr == 'max'):
+            if (sign == SimplexConfig.loose_less and self.extr == SimplexConfig.minimum) or \
+                    (sign == SimplexConfig.loose_more and self.extr == SimplexConfig.maximum):
                 self.A[ind] *= (-1)
                 self.b[ind] *= (-1)
-                if sign == '<=':
-                    self.signs[ind] = '>='
-                elif sign == '>=':
-                    self.signs[ind] = '<='
+                if sign == SimplexConfig.loose_less:
+                    self.signs[ind] = SimplexConfig.loose_more
+                elif sign == SimplexConfig.loose_more:
+                    self.signs[ind] = SimplexConfig.loose_less
 
     def find_init_X(self, X):
         init_X = np.zeros(len(self.conf_X))
