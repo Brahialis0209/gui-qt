@@ -26,7 +26,6 @@ class MyWindow(QtWidgets.QMainWindow):
         # кнопки (отправка сигнала в...)
         self.ui.comboBox_lines.textActivated.connect(self.btn_clicked_dimensions)
         self.ui.comboBox_columns.textActivated.connect(self.btn_clicked_dimensions)
-
         self.ui.pushButton_solve_simplex.clicked.connect(
             self.btn_clicked_solve)
         self.ui.pushButton_plot.clicked.connect(self.plot_graphic)
@@ -86,7 +85,7 @@ class MyWindow(QtWidgets.QMainWindow):
         pylab.show()
 
     def limit_functions(self, A, b, X):
-        Y = [[0] * len(X) for i in range(self.M)]
+        Y = [[0] * len(X) for _ in range(self.M)]
         for i in range(self.M):
             for id, x in enumerate(X):
                 Y[i][id] = (-A[i][0] * x + b[i]) / A[i][1]
@@ -146,12 +145,8 @@ class MyWindow(QtWidgets.QMainWindow):
             combo = QtWidgets.QComboBox()
             combo.addItems(self.comboBox_value_limits)
 
-    def init_values_for_simplex(self):
-        c = [0 for i in range(self.N)]
-        A = [[0] * self.N for i in range(self.M)]
-        signs = [0 for i in range(self.M)]
-        b = [0 for i in range(self.M)]
-        var_signs = [0 for i in range(self.N)]
+    def constraint_matrix_A_filling(self):
+        A = [[0] * self.N for _ in range(self.M)]
         for i in range(self.M):
             for j in range(self.N):
                 try:
@@ -159,26 +154,56 @@ class MyWindow(QtWidgets.QMainWindow):
                 except Exception:
                     raise InputSimplexException(
                         object_name="coefficients for the constraint matrix.")
+        return A
+
+    def goal_function_coefficients_filling(self):
+        c = [0 for _ in range(self.N)]
         for i in range(self.N):
             try:
                 c[i] = float(self.ui.tableWidget_function.item(0, i).text())
             except Exception:
                 raise InputSimplexException(
                     object_name="coefficients for goal function.")
+        return c
+
+    def signs_right_part_filling(self):
+        signs = [0 for _ in range(self.M)]
         for i in range(self.N):
             signs[i] = self.ui.tableWidget_A.cellWidget(i, self.N) \
                 .currentText()
+        return signs
+
+    def right_part_task_filling(self):
+        b = [0 for _ in range(self.M)]
         for i in range(self.M):
             try:
                 b[i] = float(self.ui.tableWidget_A.item(i, self.N + 1).text())
             except Exception:
                 raise InputSimplexException(
                     object_name="the right side of the set of restrictions.")
+        return b
+
+    def constraint_values_filling(self):
+        var_signs = [0 for _ in range(self.N)]
         for i in range(self.N):
             var_signs[i] = self.ui.tableWidget_limit_value. \
                 cellWidget(0, i).currentText()
-        extreme = self.ui.tableWidget_function.cellWidget(0, self.N) \
+        return var_signs
+
+    def extreme_goal_function_filling(self):
+        return self.ui.tableWidget_function.cellWidget(0, self.N) \
             .currentText()
+
+    def init_values_for_simplex(self):
+        try:
+            A = self.constraint_matrix_A_filling()
+            c = self.goal_function_coefficients_filling()
+            signs = self.signs_right_part_filling()
+            b = self.right_part_task_filling()
+            var_signs = self.constraint_values_filling()
+            extreme = self.extreme_goal_function_filling()
+        except InputSimplexException as exception:
+            raise exception
         return c, extreme, A, signs, b, var_signs
 
     def print_error_message(self, exception):
@@ -193,7 +218,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.label_error_message.hide()
         self.ui.label_solve.setText("Решение: " + "  " + str(result))
         self.ui.label_solve.adjustSize()
-        if self.N == 2:  # если 2 перменные то покажем на графике
+        if self.N == 2:  # if 2 values then show on graphic
             self.ui.pushButton_plot.show()
 
     def btn_clicked_solve(self):

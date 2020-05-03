@@ -5,7 +5,8 @@ from src.alg.exceptions import SimplexAlgorithmException, \
     IncompleteTaskRank
 from src.alg.simplex.config import SimplexConfig
 
-def del_null(A, c):
+
+def del_null(A, c):  # A - constraint matrix, # c - goal function coefficients
     null_ind = list()
     for index, column in enumerate(A):
         if all_null(column):  # all column components null
@@ -21,7 +22,7 @@ def all_null(column):
     return not list(filter(lambda x: x != 0, column))
 
 
-def plus_list(ref_vector):
+def plus_list(ref_vector):  # N - column num
     N_plus_index = []
     for index, x in enumerate(ref_vector):
         if x > 0:
@@ -29,7 +30,7 @@ def plus_list(ref_vector):
     return N_plus_index
 
 
-def artificial_basis(A, b):
+def artificial_basis(A, b):  # A - constraint matrix, # c - goal function coefficients
     rows, columns = A.shape
     rank = np.linalg.matrix_rank(A)
     if rank != rows:
@@ -38,7 +39,7 @@ def artificial_basis(A, b):
     sub_A = np.append(A, E, axis=1)
     arr_zero = np.zeros(columns, float)
     sub_c = np.append(arr_zero, np.ones(rows))
-    ref_vector = np.append(arr_zero, b)
+    ref_vector = np.append(arr_zero, b)  # ref_vector - new approximation
     return sub_A, sub_c, ref_vector
 
 
@@ -46,13 +47,13 @@ def pos_vector(vector):
     return not list(filter(lambda x: x < 0, vector))
 
 
-def find_new_basis(N_k, indices_not_plus_element, L, A):
-    sub_A = list()
+def find_new_basis(N_k, indices_not_plus_element, L, A):  # N_k - column num in current ref_vector
+    sub_A = list()  # A - constraint matrix, # c - goal function coefficients
     for ind_not_plus_element in indices_not_plus_element:
         for ind_N_k in N_k:
             if ind_N_k != ind_not_plus_element:
                 sub_A.append(A.transpose()[ind_N_k])
-        for ind_L in L:
+        for ind_L in L:  # L - column num who negative
             new_A_N = cp.deepcopy(sub_A)
             new_A_N.append(A.transpose()[ind_L])
             new_A_N = np.array(new_A_N)
@@ -62,8 +63,8 @@ def find_new_basis(N_k, indices_not_plus_element, L, A):
         N_k.append(ind_not_plus_element)
 
 
-def find_A_N(A, A_N, N_k, N_null_index):
-    new_M, new_N = A_N.shape
+def find_A_N(A, A_N, N_k, N_null_index):  # N_k - column num in current ref_vector
+    new_M, new_N = A_N.shape  # A - constraint matrix, # c - goal function coefficients
     delta = new_M - new_N
     if delta == 0:
         return N_k
@@ -82,7 +83,7 @@ def find_A_N(A, A_N, N_k, N_null_index):
 
 
 def find_new_B(B, N_k, i_k, sub_u):  # inverse calculation
-    F = np.eye(len(N_k))
+    F = np.eye(len(N_k))  # B - inv to A, F - inv to B
     for ind in range(len(N_k)):
         column_element_for_F = -sub_u[ind] if F[ind][N_k.index(i_k)] != 1 else 1
         F[ind][N_k.index(i_k)] = column_element_for_F / sub_u[N_k.index(i_k)]
@@ -112,11 +113,11 @@ def simplex_dates_L_dimension(N_k, A, c, B):
     A_L = np.array(A_L).transpose()
     c_L = np.array(c_L)
     Y = np.dot(c_N.transpose(), B)
-    return c_L - np.dot(Y, A_L), L
+    return c_L - np.dot(Y, A_L), L  # d_L and L
 
 
 def calc_j_k(d_L, L):
-    neg_elements_d_L = list(filter(lambda x: x < 0, d_L))
+    neg_elements_d_L = list(filter(lambda x: x < 0, d_L))  # d_L = c_L - np.dot(Y, A_L)
     return L[list(d_L).index(neg_elements_d_L[0])] if neg_elements_d_L else 0
 
 
@@ -129,12 +130,12 @@ def calc_list_i_k(N_k, sub_u, u):
     return i_k_list
 
 
-def calc_coefficients(i_k_list, ref_vector, u):
+def calc_coefficients(i_k_list, ref_vector, u):  # coefficient - gamma(min fraction)
     i_k = i_k_list[0]
     coefficient = ref_vector[i_k] / u[i_k]
     for i in i_k_list:
         if (ref_vector[i] / u[i]) < coefficient:
-            i_k = i
+            i_k = i  # index min fraction
             coefficient = ref_vector[i_k] / u[i_k]
     return coefficient, i_k
 
@@ -149,15 +150,15 @@ def calc_indices_not_plus_element(N_k, N_plus_index):
 
 def main_algorithm(N_k, A, c, ref_vector, B):
     M, N = A.shape
-    d_L, L = simplex_dates_L_dimension(N_k, A, c, B)
+    d_L, L = simplex_dates_L_dimension(N_k, A, c, B)  # d_L = c_L - np.dot(Y, A_L)
     update_d_L(d_L)
     if pos_vector(d_L):
         return True, ref_vector, B, N_k
-    j_k = calc_j_k(d_L, L)
+    j_k = calc_j_k(d_L, L)  # j_k = first index in L
     A_j = A.transpose()[j_k]
     u = np.zeros(N)
     sub_u = np.dot(B, A_j.transpose())
-    i_k_list = calc_list_i_k(N_k, sub_u, u)
+    i_k_list = calc_list_i_k(N_k, sub_u, u)  # i_k -  index min fraction
     u[j_k] = -1
     if len(i_k_list) == 0:
         return False, np.zeros(N), B, N_k
@@ -178,7 +179,7 @@ def main_algorithm(N_k, A, c, ref_vector, B):
 def first_step(A, ref_vector):
     M, N = A.shape
     N_k = list()
-    N_null_index = list()
+    N_null_index = list()  # need to build N_k
     N_plus_index = list()
     A_N = list()
     for ind, x in enumerate(ref_vector):
@@ -191,7 +192,7 @@ def first_step(A, ref_vector):
     A_N = np.array(A_N)
     A_N = A_N.transpose()
     B = np.eye(M)
-    N_k = find_A_N(A, A_N, N_k, N_null_index)
+    N_k = find_A_N(A, A_N, N_k, N_null_index)  # N_k - column num in current ref_vector
     return N_k, B
 
 
@@ -200,7 +201,7 @@ def N_K_dates_L_dimensions(N, N_k):
     for index in range(N):
         if index not in N_k:
             L.append(index)
-    return L
+    return L  # L - column num who negative
 
 
 def transform_ref_vector(ref_vector, B, N_k, A):
@@ -216,7 +217,7 @@ def transform_ref_vector(ref_vector, B, N_k, A):
     B = np.array(new_B)
     L = N_K_dates_L_dimensions(N, N_k)
     A_N = np.array(A_N).transpose()
-    E = np.eye(M)
+    E = np.eye(M)  # eye matrix M dimension
     for i in range(M):
         for j in range(M):
             if np.array_equal(A_N[:, i], E[:, j]):
@@ -231,7 +232,7 @@ def transform_ref_vector(ref_vector, B, N_k, A):
                         N_k[i] = j_k
                         L.remove(ind)
                         break
-    return ref_vector, B
+    return ref_vector, B  # B - inv to A
 
 
 def start_simplex_method(A, b, c):
@@ -255,4 +256,4 @@ def start_alg_iterations(N_k, ref_vector, B, A, c, plot_points):
         if all_null(ref_vector):
             raise SimplexAlgorithmException()
         plot_points.append(ref_vector)
-    return ref_vector, B, N_k
+    return ref_vector, B, N_k  # B - inv to A
