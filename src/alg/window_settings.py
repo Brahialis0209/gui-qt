@@ -16,14 +16,17 @@ class MyWindow(QtWidgets.QMainWindow):
         self.comboBox_extreme = ["min", "max"]
         self.comboBox_columns_values = ['..', "2", "3", "4",
                                         "5", "6", "7"]
-        self.comboBox_value_limits = ["positive", "any"]
+        self.comboBox_value_limits = ["any", "positive"]
+        self.column_value_name = "X"
+        self.column_right_part_name = "b"
+        self.column_extreme_name = "extreme"
         self.start_ui()
 
     def start_ui(self):
-        self.ui.comboBox_columns.addItems(self.comboBox_columns_values)  # выбор числа переменных
-        self.ui.comboBox_lines.addItems(self.comboBox_columns_values)  # выбор числа строк
-        self.hide_labels()  # до начала ввода размерности не показываем ввод матрицы и функций
-        # кнопки (отправка сигнала в...)
+        self.ui.comboBox_columns.addItems(self.comboBox_columns_values)  # columns num
+        self.ui.comboBox_lines.addItems(self.comboBox_columns_values)  # lines num
+        self.hide_labels()  # while don't enter dimensions we don't show A and c
+        # buttons (send signal to...)
         self.ui.comboBox_lines.textActivated.connect(self.btn_clicked_dimensions)
         self.ui.comboBox_columns.textActivated.connect(self.btn_clicked_dimensions)
         self.ui.pushButton_solve_simplex.clicked.connect(
@@ -92,7 +95,7 @@ class MyWindow(QtWidgets.QMainWindow):
         return Y
 
     def btn_clicked_dimensions(self):
-        self.clear_labels()  # нужно если я уже посчитал что-то и
+        self.clear_labels()  # need if a built something
         columns_box_date = self.ui.comboBox_columns.currentText()
         lines_box_date = self.ui.comboBox_lines.currentText()
         if columns_box_date.isdigit() and lines_box_date.isdigit():
@@ -100,10 +103,10 @@ class MyWindow(QtWidgets.QMainWindow):
             self.M = int(self.ui.comboBox_lines.currentText())
         else:
             return
-        self.build_table()  # строю все виджеты
+        self.build_table()  # build all widgets
         self.build_function()
         self.build_value_limit()
-        self.ui.pushButton_solve_simplex.show()  # кнопка "Посчиать"
+        self.ui.pushButton_solve_simplex.show()  # button "Посчиать"
         self.ui.pushButton_plot.hide()
 
     def build_table(self):
@@ -112,7 +115,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.tableWidget_A.setColumnCount(self.N + 2)
         self.ui.tableWidget_A.setRowCount(self.M)
         self.ui.tableWidget_A.setHorizontalHeaderLabels(
-            ["X" + str(i + 1) for i in range(self.N)] + [" ", "b"])
+            [self.column_value_name + str(i + 1) for i in range(self.N)] + [" ", self.column_right_part_name])
         combo = QtWidgets.QComboBox()
         combo.addItems(self.comboBox_signs)
         for i in range(self.M):
@@ -126,7 +129,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.tableWidget_function.setColumnCount(self.N + 1)
         self.ui.tableWidget_function.setRowCount(1)
         self.ui.tableWidget_function.setHorizontalHeaderLabels(
-            ["X" + str(i + 1) for i in range(self.N)] + ["extreme"])
+            [self.column_value_name + str(i + 1) for i in range(self.N)] + [self.column_extreme_name])
         combo = QtWidgets.QComboBox()
         combo.addItems(self.comboBox_extreme)
         self.ui.tableWidget_function.setCellWidget(0, self.N, combo)
@@ -137,7 +140,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.tableWidget_limit_value.setColumnCount(self.N)
         self.ui.tableWidget_limit_value.setRowCount(1)
         self.ui.tableWidget_limit_value.setHorizontalHeaderLabels(
-            ["X" + str(i + 1) for i in range(self.N)])
+            [self.column_value_name + str(i + 1) for i in range(self.N)])
         combo = QtWidgets.QComboBox()
         combo.addItems(self.comboBox_value_limits)
         for i in range(self.N):
