@@ -1,6 +1,7 @@
 import numpy as np
 from src.alg.simplex.config import SimplexConfig
 
+
 class LinearProgramProblem:
     def __init__(self, c, extr, A, signs, b, var_sings):
         self.c = c

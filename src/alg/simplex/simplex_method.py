@@ -3,7 +3,7 @@ import itertools as it
 import copy as cp
 from src.alg.exceptions import SimplexAlgorithmException, \
     IncompleteTaskRank
-
+from src.alg.simplex.config import SimplexConfig
 
 def del_null(A, c):
     null_ind = list()
@@ -91,7 +91,7 @@ def find_new_B(B, N_k, i_k, sub_u):  # inverse calculation
 
 def update_d_L(d_L):
     for index, d in enumerate(d_L):
-        if abs(d) <= eps:
+        if abs(d) <= SimplexConfig.eps:
             d_L[index] = 0
 
 
