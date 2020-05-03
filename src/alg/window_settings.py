@@ -14,7 +14,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.comboBox_signs = ["=", ">=", "<="]
         self.comboBox_extreme = ["min", "max"]
-        self.comboBox_columns_values = ["2", "3", "4",
+        self.comboBox_columns_values = ['..', "2", "3", "4",
                                         "5", "6", "7"]
         self.comboBox_value_limits = ["positive", "any"]
         self.start_ui()
@@ -24,8 +24,9 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.comboBox_lines.addItems(self.comboBox_columns_values)  # выбор числа строк
         self.hide_labels()  # до начала ввода размерности не показываем ввод матрицы и функций
         # кнопки (отправка сигнала в...)
-        self.ui.pushButton_insert_dimencsion.clicked.connect(
-            self.btn_clicked_dimensions)
+        self.ui.comboBox_lines.textActivated.connect(self.btn_clicked_dimensions)
+        self.ui.comboBox_columns.textActivated.connect(self.btn_clicked_dimensions)
+
         self.ui.pushButton_solve_simplex.clicked.connect(
             self.btn_clicked_solve)
         self.ui.pushButton_plot.clicked.connect(self.plot_graphic)
@@ -93,8 +94,13 @@ class MyWindow(QtWidgets.QMainWindow):
 
     def btn_clicked_dimensions(self):
         self.clear_labels()  # нужно если я уже посчитал что-то и
-        self.N = int(self.ui.comboBox_columns.currentText())
-        self.M = int(self.ui.comboBox_lines.currentText())
+        columns_box_date = self.ui.comboBox_columns.currentText()
+        lines_box_date = self.ui.comboBox_lines.currentText()
+        if columns_box_date.isdigit() and lines_box_date.isdigit():
+            self.N = int(columns_box_date)
+            self.M = int(self.ui.comboBox_lines.currentText())
+        else:
+            return
         self.build_table()  # строю все виджеты
         self.build_function()
         self.build_value_limit()

@@ -32,9 +32,6 @@ class Ui_MainWindow(object):
         self.label_greeting.setTextFormat(QtCore.Qt.AutoText)
         self.label_greeting.setWordWrap(True)
         self.label_greeting.setObjectName("label_greeting")
-        self.pushButton_insert_dimencsion = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_insert_dimencsion.setGeometry(QtCore.QRect(0, 90, 91, 23))
-        self.pushButton_insert_dimencsion.setObjectName("pushButton_insert_dimencsion")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(0, 50, 298, 41))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
@@ -76,7 +73,7 @@ class Ui_MainWindow(object):
         self.tableWidget_function.setColumnCount(0)
         self.tableWidget_function.setRowCount(0)
         self.pushButton_solve_simplex = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_solve_simplex.setGeometry(QtCore.QRect(10, 540, 75, 23))
+        self.pushButton_solve_simplex.setGeometry(QtCore.QRect(10, 540, 121, 31))
         self.pushButton_solve_simplex.setObjectName("pushButton_solve_simplex")
         self.label__limit_value = QtWidgets.QLabel(self.centralwidget)
         self.label__limit_value.setGeometry(QtCore.QRect(0, 440, 241, 16))
@@ -115,7 +112,6 @@ class Ui_MainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:14pt;\">Симплексный метод решения задачи линейного программирования.</span></p></body></html>"))
-        self.pushButton_insert_dimencsion.setText(_translate("MainWindow", "Ввести"))
         self.label_lines.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Выберите число строк(ограничений):</span></p></body></html>"))
         self.label_columns.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt;\">Выберите число переменных:</span></p></body></html>"))
         self.label_limitations.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">Введите коэффициенты для множества ограничений:</span></p></body></html>"))
