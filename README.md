@@ -20,6 +20,9 @@ This application is for solving the linear programming problem by the simplex me
 - Also, if the dimension of the problem = 2, (two variables), then the application will suggest constructing a graph of iterations <br>
   when finding the optimal solution.
 - Use the magnifier in the panel to enlarge the image.
+- If the application reported an algorithm loop, then you will be asked to remove the restrictions on the variable - change to `any`
+### Requirements for the task conditions
+- Make sure your constraint matrix is full rank.
 
 
 # Reference in Russian
@@ -43,6 +46,9 @@ This application is for solving the linear programming problem by the simplex me
 - Также, если размерность задачи = 2, (две переменные) то приложение предложит построить график итераций<br>
   при нахождении оптимального решения.
 - Для увеличения изображения используйте лупу в панели.
+- Если приложение сообщило о зацикливании алгоритма, то вам будет предложено снять ограничения на переменную - поменять на `any`
+### Требования к условиям задачи
+- Убедитесь что ваша матрица ограничений - полного ранга.
 ### Пример
 #### Следующая задача была взята как пример.
 ![gui](images/example1_widgets.png)<br>

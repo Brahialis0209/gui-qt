@@ -76,11 +76,11 @@ class MyWindow(QtWidgets.QMainWindow):
             if id != 0:
                 line_type = "h"
             pylab.plot(point[0], point[1], line_type)
-        pylab.annotate(u'Начальное приближение',
+        pylab.annotate(u'Initial approach',
                        xy=(first_point[0], first_point[1]),
                        xytext=(first_point[0] + 2, first_point[1] + 0.1),
                        arrowprops=arrowprops)
-        pylab.annotate(u'Решение',
+        pylab.annotate(u'decision',
                        xy=(solve_point[0], solve_point[1]),
                        xytext=(solve_point[0] + 2, solve_point[1] + 0.1),
                        arrowprops=arrowprops)
@@ -171,7 +171,7 @@ class MyWindow(QtWidgets.QMainWindow):
 
     def signs_right_part_filling(self):
         signs = [0 for _ in range(self.M)]
-        for i in range(self.N):
+        for i in range(self.M):
             signs[i] = self.ui.tableWidget_A.cellWidget(i, self.N) \
                 .currentText()
         return signs
@@ -219,7 +219,7 @@ class MyWindow(QtWidgets.QMainWindow):
     def print_solve_answer(self, result):
         self.ui.label_solve.show()
         self.ui.label_error_message.hide()
-        self.ui.label_solve.setText("Решение: " + "  " + str(result))
+        self.ui.label_solve.setText("Answer: " + "  " + str(result))
         self.ui.label_solve.adjustSize()
         if self.N == 2:  # if 2 values then show on graphic
             self.ui.pushButton_plot.show()
