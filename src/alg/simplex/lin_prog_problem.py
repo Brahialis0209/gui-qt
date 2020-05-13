@@ -4,12 +4,12 @@ from src.alg.simplex.config import SimplexConfig
 
 class LinearProgramProblem:
     def __init__(self, c, extr, A, signs, b, var_sings):
-        self.c = c
+        self.c = c  # c - goal function coefficients
         self.extr = extr
-        self.A = A
-        self.signs = signs
-        self.b = b
-        self.var_signs = var_sings
+        self.A = A  # A - constraint matrix
+        self.signs = signs  # signs - signs between A and b
+        self.b = b  # b - right part
+        self.var_signs = var_sings  # limits on values
         self.lim_cnt, self.var_cnt = self.A.shape
         self.conf_X = list([i] for i in range(self.var_cnt))
 
