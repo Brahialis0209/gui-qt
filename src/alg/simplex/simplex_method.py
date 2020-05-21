@@ -67,7 +67,7 @@ def find_A_N(A, A_N, N_k, N_null_index):  # N_k - column num in current ref_vect
     new_M, new_N = A_N.shape  # A - constraint matrix, # c - goal function coefficients
     delta = new_M - new_N
     if delta == 0:
-        return N_k
+        return N_k, A_N
     column_A_combinations = list(it.combinations(N_null_index, delta))
     for column_A in column_A_combinations:
         sub_A = list()
