@@ -79,7 +79,7 @@ def find_A_N(A, A_N, N_k, N_null_index):  # N_k - column num in current ref_vect
         if np.linalg.det(sub_A) != 0:
             for index in column_A:
                 N_k.append(index)
-            return N_k
+            return N_k, sub_A
 
 
 def find_new_B(B, N_k, i_k, sub_u):  # inverse calculation
@@ -191,8 +191,9 @@ def first_step(A, ref_vector):
             N_null_index.append(ind)
     A_N = np.array(A_N)
     A_N = A_N.transpose()
-    B = np.eye(M)
-    N_k = find_A_N(A, A_N, N_k, N_null_index)  # N_k - column num in current ref_vector
+    # B = np.eye(M)
+    N_k, A_N = find_A_N(A, A_N, N_k, N_null_index)  # N_k - column num in current ref_vector
+    B = np.linalg.inv(A_N)
     return N_k, B
 
 
