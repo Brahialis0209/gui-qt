@@ -63,7 +63,7 @@ def find_new_basis(N_k, indices_not_plus_element, L, A):  # N_k - column num in 
         N_k.append(ind_not_plus_element)
 
 
-def find_A_N(A, A_N, N_k, N_null_index):  # N_k - column num in current ref_vector
+def find_new_A_N(A, A_N, N_k, N_null_index):  # N_k - column num in current ref_vector
     new_M, new_N = A_N.shape  # A - constraint matrix, # c - goal function coefficients
     delta = new_M - new_N
     if delta == 0:
@@ -131,11 +131,11 @@ def calc_list_i_k(N_k, sub_u, u):
 
 
 def calc_coefficients(i_k_list, ref_vector, u):  # coefficient - gamma(min fraction)
-    i_k = i_k_list[0]
+    i_k = i_k_list[0]  # index min fraction
     coefficient = ref_vector[i_k] / u[i_k]
     for i in i_k_list:
         if (ref_vector[i] / u[i]) < coefficient:
-            i_k = i  # index min fraction
+            i_k = i
             coefficient = ref_vector[i_k] / u[i_k]
     return coefficient, i_k
 
@@ -177,7 +177,6 @@ def main_algorithm(N_k, A, c, ref_vector, B):
 
 
 def first_step(A, ref_vector):
-    M, N = A.shape
     N_k = list()
     N_null_index = list()  # need to build N_k
     N_plus_index = list()
@@ -191,18 +190,17 @@ def first_step(A, ref_vector):
             N_null_index.append(ind)
     A_N = np.array(A_N)
     A_N = A_N.transpose()
-    # B = np.eye(M)
-    N_k, A_N = find_A_N(A, A_N, N_k, N_null_index)  # N_k - column num in current ref_vector
-    B = np.linalg.inv(A_N)
+    N_k, new_A_N = find_new_A_N(A, A_N, N_k, N_null_index)  # N_k - column num in current ref_vector
+    B = np.linalg.inv(new_A_N)
     return N_k, B
 
 
 def N_K_dates_L_dimensions(N, N_k):
-    L = list()
+    L = list()  # L - column num who negative
     for index in range(N):
         if index not in N_k:
             L.append(index)
-    return L  # L - column num who negative
+    return L
 
 
 def transform_ref_vector(ref_vector, B, N_k, A):
@@ -215,7 +213,7 @@ def transform_ref_vector(ref_vector, B, N_k, A):
     for ind in N_k:
         A_N.append(A.transpose()[ind])
         new_B.append(B[N_k_old.index(ind), :])
-    B = np.array(new_B)
+    B = np.array(new_B)  # B - inv to A
     L = N_K_dates_L_dimensions(N, N_k)
     A_N = np.array(A_N).transpose()
     E = np.eye(M)  # eye matrix M dimension
@@ -233,7 +231,7 @@ def transform_ref_vector(ref_vector, B, N_k, A):
                         N_k[i] = j_k
                         L.remove(ind)
                         break
-    return ref_vector, B  # B - inv to A
+    return ref_vector, B
 
 
 def start_simplex_method(A, b, c):
@@ -257,4 +255,4 @@ def start_alg_iterations(N_k, ref_vector, B, A, c, plot_points):
         if all_null(ref_vector):
             raise SimplexAlgorithmException()
         plot_points.append(ref_vector)
-    return ref_vector, B, N_k  # B - inv to A
+    return ref_vector, B, N_k
