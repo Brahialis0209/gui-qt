@@ -2,7 +2,7 @@ import numpy as np
 import copy as cp
 from src.alg.simplex.lin_prog_problem import LinearProgramProblem
 from src.alg.exceptions import SimplexAlgorithmException, \
-    IncompleteTaskRank, LoopingAlgorithmException
+    IncompleteTaskRankException, LoopingAlgorithmException
 from src.alg.simplex.simplex_method import start_simplex_method
 
 
@@ -29,8 +29,8 @@ class SimplexValues:
                                                   canon_lp.c)
         except SimplexAlgorithmException:
             raise SimplexAlgorithmException()
-        except IncompleteTaskRank:
-            raise IncompleteTaskRank()
+        except IncompleteTaskRankException:
+            raise IncompleteTaskRankException()
         except Exception:
             raise LoopingAlgorithmException()
 

@@ -32,7 +32,7 @@ class LoopingAlgorithmException(Exception):
         return self.err_type
 
 
-class IncompleteTaskRank(Exception):
+class IncompleteTaskRankException(Exception):
 
     def __init__(self):
         Exception.__init__(self)
@@ -44,7 +44,7 @@ class IncompleteTaskRank(Exception):
         return self.type_err
 
 
-class NotSolveSimplex(Exception):
+class NotSolveSimplexException(Exception):
 
     def __init__(self):
         Exception.__init__(self)

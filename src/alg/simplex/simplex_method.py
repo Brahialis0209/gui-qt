@@ -2,7 +2,7 @@ import numpy as np
 import itertools as it
 import copy as cp
 from src.alg.exceptions import SimplexAlgorithmException, \
-    IncompleteTaskRank
+    IncompleteTaskRankException
 from src.alg.simplex.config import SimplexConfig
 
 
@@ -34,7 +34,7 @@ def artificial_basis(A, b):  # A - constraint matrix, # c - goal function coeffi
     rows, columns = A.shape
     rank = np.linalg.matrix_rank(A)
     if rank != rows:
-        raise IncompleteTaskRank()
+        raise IncompleteTaskRankException()
     E = np.eye(rows)
     sub_A = np.append(A, E, axis=1)
     arr_zero = np.zeros(columns, float)
@@ -238,8 +238,8 @@ def start_simplex_method(A, b, c):
     plot_points = list()
     try:
         sub_A, sub_c, ref_vector = artificial_basis(A, b)
-    except IncompleteTaskRank:
-        raise IncompleteTaskRank()
+    except IncompleteTaskRankException:
+        raise IncompleteTaskRankException()
     N_k, B = first_step(sub_A, ref_vector)
     ref_vector, B, N_k = start_alg_iterations(N_k, ref_vector, B, sub_A, sub_c, plot_points)
     ref_vector, B = transform_ref_vector(ref_vector, B, N_k, A)

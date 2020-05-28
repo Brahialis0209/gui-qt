@@ -3,7 +3,7 @@ from design_gui.design import Ui_MainWindow
 import numpy as np
 from matplotlib import pylab
 from src.alg.exceptions import InputSimplexException, \
-    SimplexAlgorithmException, NotSolveSimplex, IncompleteTaskRank, LoopingAlgorithmException
+    SimplexAlgorithmException, NotSolveSimplexException, IncompleteTaskRankException, LoopingAlgorithmException
 from src.alg.simplex.start_work import SimplexValues
 
 
@@ -234,7 +234,7 @@ class MyWindow(QtWidgets.QMainWindow):
 
         try:
             result, self.plot_points = self.simplex_example.extreme_value()
-        except (SimplexAlgorithmException, IncompleteTaskRank, NotSolveSimplex, LoopingAlgorithmException) as exception:
+        except (SimplexAlgorithmException, IncompleteTaskRankException, NotSolveSimplexException, LoopingAlgorithmException) as exception:
             self.print_error_message(exception)
             return
 
