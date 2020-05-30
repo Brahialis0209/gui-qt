@@ -1,0 +1,19 @@
+image: python:3-slim
+before_script:
+    - pip3 install -r requirements.txt
+    - pip3 install -r dev_requirements.txt
+stages:
+    - static_analysis
+    - test
+static_analysis:
+    stage: static_analysis
+    script:
+        - flake8 src/*.py tests/*.py
+app_test:
+    stage: test
+    script:
+          - echo "Tests started..."
+          - python -m unittest discover 'tests/'
+          - echo "Tests over."
+
+
